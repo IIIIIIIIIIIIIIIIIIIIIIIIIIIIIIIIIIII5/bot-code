@@ -28,6 +28,8 @@ const { ActivityType } = require('discord.js');
 
 const economy = new Map();
 
+const spamOffenses = new Map();
+
 const sendDM = async (user, content) => {
   try {
     const dm = await user.createDM();
@@ -37,16 +39,9 @@ const sendDM = async (user, content) => {
   }
 };
 
- const getOrCreateUserEconomy = (userId) => {
-  let userData = economy.get(userId);
-  if (!userData) {
-    userData = { balance: 0, lastDaily: 0 };
-    economy.set(userId, userData);
-  }
-  return userData;
-};
-
 const ticketInfo = new Map();
+
+const recentMessages = new Map();
 
 const config = {
   ticketRole: '1369334028544639017',
@@ -218,7 +213,7 @@ client.once('ready', async () => {
     }
   );
 
-  client.user.setActivity(process.env.STATUS, { type: ActivityType.Watching });
+  client.user.setActivity('Over Hotrotkas Capes!', { type: ActivityType.Watching });
 
   console.log(`🤖 Logged in as ${client.user.tag}`);
 });
@@ -241,6 +236,51 @@ const getRoast = async () => {
     return "Roast generator failed. You're lucky... for now.";
   }
 };
+
+async function punishSpammer(user, guild) {
+  const userId = user.id;
+  let offense = spamOffenses.get(userId) || 0;
+  offense++;
+  spamOffenses.set(userId, offense);
+
+  const durations = [
+    10 * 60_000,
+    30 * 60_000,
+    60 * 60_000,
+    10 * 60 * 60_000,
+    24 * 60 * 60_000,
+    7 * 24 * 60 * 60_000,
+    21 * 24 * 60 * 60_000
+  ];
+
+  const duration = durations[Math.min(offense - 1, durations.length - 1)];
+
+  try {
+    const member = await guild.members.fetch(userId);
+    await member.timeout(duration, `Spamming offense #${offense}`);
+    await sendDM(user, `🚫 You were timed out for **spamming** (Offense #${offense})\nDuration: **${Math.floor(duration / 60000)} minutes**`);
+    console.log(`Timed out ${user.tag} for spam (Offense ${offense})`);
+  } catch (err) {
+    console.error(`Failed to timeout ${user.tag}:`, err);
+  }
+}
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot || !message.guild) return;
+
+  const now = Date.now();
+  const userId = message.author.id;
+  const msgData = recentMessages.get(userId) || { lastMsg: '', lastTime: 0 };
+
+  if (
+    msgData.lastMsg === message.content &&
+    now - msgData.lastTime < 5000
+  ) {
+    await punishSpammer(message.author, message.guild);
+  }
+
+  recentMessages.set(userId, { lastMsg: message.content, lastTime: now });
+});
 
 client.on('interactionCreate', async (interaction) => {
   if (interaction.isChatInputCommand()) {
