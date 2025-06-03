@@ -217,7 +217,7 @@ client.once('ready', async () => {
     }
   );
 
-  client.user.setActivity('Over Hotrotkas Capes!', { type: ActivityType.Watching });
+  client.user.setActivity(process.env.STATUS, { type: ActivityType.Watching });
 
   console.log(`🤖 Logged in as ${client.user.tag}`);
 });
