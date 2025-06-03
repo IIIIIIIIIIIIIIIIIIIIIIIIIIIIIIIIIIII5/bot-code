@@ -73,7 +73,7 @@ const commands = [
 
   new SlashCommandBuilder()
   .setName('suicideprevention')
-  .setDescription('Get help if you are feeling overwhelmed or suicidal.')
+  .setDescription('Get help if you are feeling overwhelmed or suicidal.'),
 
   new SlashCommandBuilder()
     .setName('ban')
