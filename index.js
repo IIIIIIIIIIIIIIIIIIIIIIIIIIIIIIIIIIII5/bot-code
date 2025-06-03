@@ -72,7 +72,7 @@ const commands = [
   .setDescription('Finds an image of a skibidi lion'),
 
   new SlashCommandBuilder()
-  .setName('sp')
+  .setName('suicideprevention')
   .setDescription('Helps with suicidal thoughts.'),
 
   new SlashCommandBuilder()
@@ -340,7 +340,7 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.reply({ content: '❌ Failed to change nickname. Do I have permission?', ephemeral: true });
   }
 }
-      else if (commandName === 'sp') {
+      else if (commandName === 'suicideprevention') {
   const user = interaction.user;
 
   const supportMessage = `
