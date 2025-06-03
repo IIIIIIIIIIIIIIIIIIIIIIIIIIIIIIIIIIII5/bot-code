@@ -432,31 +432,31 @@ else if (commandName === 'hug') {
 
   await interaction.deferReply();
 
-  const GIPHY_API_KEY = 'd4YIU6uoHbUn8LmytyApPHc73kzmSdwY';
-  const query = 'lions hugging';
-  const apiURL = `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&api_key=${GIPHY_API_KEY}&limit=25&rating=pg`;
+  const TENOR_API_KEY = 'AIzaSyCxp8PjYbCxssVNGsxLPXGrbKYyUhQQr1Y';
+  const query = 'Lion Hugs';
+  const apiURL = `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(query)}&key=${TENOR_API_KEY}&limit=25&media_filter=gif`;
 
   try {
     const res = await fetch(apiURL);
     const data = await res.json();
 
-    if (!data || !data.data || data.data.length === 0) {
-      return interaction.editReply('😔 No hug GIFs found.');
+    if (!data.results || data.results.length === 0) {
+      return interaction.editReply('😢 Could not find a hug GIF right now.');
     }
 
-    const gifUrl = data.data[Math.floor(Math.random() * data.data.length)].images.original.url;
+    const gifUrl = data.results[Math.floor(Math.random() * data.results.length)].media_formats.gif.url;
 
     const embed = new EmbedBuilder()
       .setTitle('🤗 Hug!')
-      .setDescription(`**${sender.username}** gives **${targetUser.username}** a warm hug!`)
+      .setDescription(`**${sender.username}** gives **${targetUser.username}** a big hug!`)
       .setImage(gifUrl)
       .setColor('#FFC0CB');
 
     await interaction.editReply({ embeds: [embed] });
 
-  } catch (error) {
-    console.error('Hug GIF error:', error);
-    await interaction.editReply('❌ Something went wrong fetching a hug GIF.');
+  } catch (err) {
+    console.error('Tenor fetch error:', err);
+    await interaction.editReply('❌ Failed to fetch a hug GIF.');
   }
 }
 
