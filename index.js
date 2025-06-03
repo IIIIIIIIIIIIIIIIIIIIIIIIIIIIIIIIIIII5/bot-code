@@ -433,7 +433,7 @@ else if (commandName === 'hug') {
   await interaction.deferReply();
 
   const GIPHY_API_KEY = 'd4YIU6uoHbUn8LmytyApPHc73kzmSdwY';
-  const query = 'lion hugs';
+  const query = 'lions hugging';
   const apiURL = `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&api_key=${GIPHY_API_KEY}&limit=25&rating=pg`;
 
   try {
