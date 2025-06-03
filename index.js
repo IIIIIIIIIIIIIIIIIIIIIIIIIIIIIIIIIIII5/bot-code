@@ -361,12 +361,12 @@ We care about you. Please don’t hesitate to reach out. 💙`;
   try {
     await sendDM(user, supportMessage);
     await interaction.reply({
-      content: '📬 I’ve sent you a private message with resources. Please check your DMs.',
+      content: 'Please check your DMs.',
       ephemeral: true
     });
   } catch (err) {
     await interaction.reply({
-      content: '❌ I couldn’t send you a DM. Please make sure your DMs are open.',
+      content: 'I couldn’t send you a DM. Please make sure your DMs are open.',
       ephemeral: true
     });
   }
