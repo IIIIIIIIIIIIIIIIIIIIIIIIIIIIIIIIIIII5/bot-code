@@ -155,7 +155,10 @@ const commands = [
 
   new SlashCommandBuilder()
   .setName('hug')
-  .setDescription('Gives you a hug.'),
+  .setDescription('Gives a hug to someone!')
+  .addUserOption((opt) =>
+    opt.setName('user').setDescription('The person you want to hug').setRequired(true)
+  ),
 
   new SlashCommandBuilder()
     .setName('say')
@@ -423,9 +426,35 @@ We care about you. Please don’t hesitate to reach out. 💙`;
         .setColor('#3498db');
       await interaction.reply({ embeds: [embed] });
     }
-    else if (commandName === 'hug') {
-      await interaction.reply(`-Hugs-`);
+   else if (commandName === 'hug') {
+  const targetUser = options.getUser('user');
+  const sender = interaction.user;
+
+  await interaction.deferReply();
+
+  try {
+    const response = await fetch('https://tenor.googleapis.com/v2/search?q=hug&key=LIVDSRZULELA&limit=20&media_filter=gif');
+    const data = await response.json();
+
+    if (!data.results || data.results.length === 0) {
+      return interaction.editReply('😢 Couldn’t find a hug GIF.');
     }
+
+    const gif = data.results[Math.floor(Math.random() * data.results.length)].media_formats.gif.url;
+
+    const embed = new EmbedBuilder()
+      .setTitle('🤗 Hug!')
+      .setDescription(`**${sender.username}** gives **${targetUser.username}** a big hug!`)
+      .setImage(gif)
+      .setColor('#FFC0CB');
+
+    await interaction.editReply({ embeds: [embed] });
+  } catch (err) {
+    console.error(err);
+    await interaction.editReply('❌ Failed to fetch a hug GIF.');
+  }
+}
+
     else if (commandName === 'kick') {
       if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
     return interaction.reply({
