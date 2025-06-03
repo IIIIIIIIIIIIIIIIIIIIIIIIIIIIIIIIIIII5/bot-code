@@ -352,7 +352,7 @@ If you're feeling overwhelmed, hopeless, or thinking about suicide, please know 
 • UK: 116 123 (Samaritans)  
 • Canada: 1-833-456-4566  
 • Australia: 13 11 14  
-• Or visit [https://findahelpline.com](https://findahelpline.com) for more options worldwide.
+• Or visit [Helpline](https://findahelpline.com) for more options worldwide.
 
 **🫂 You're important. You matter. Talking to someone can help.**
 
