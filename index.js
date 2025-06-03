@@ -72,6 +72,10 @@ const commands = [
   .setDescription('Finds an image of a skibidi lion'),
 
   new SlashCommandBuilder()
+  .setName('suicideprevention')
+  .setDescription('Get help if you are feeling overwhelmed or suicidal.')
+
+  new SlashCommandBuilder()
     .setName('ban')
     .setDescription('Ban a user.')
     .addUserOption((opt) =>
@@ -336,6 +340,38 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.reply({ content: '❌ Failed to change nickname. Do I have permission?', ephemeral: true });
   }
 }
+      else if (commandName === 'suicideprevention') {
+  const user = interaction.user;
+
+  const supportMessage = `
+**💙 You're Not Alone**
+If you're feeling overwhelmed, hopeless, or thinking about suicide, please know that there is help available and people who care about you.
+
+**📞 Reach Out for Help:**
+• USA: 988 or 1-800-273-TALK (8255)  
+• UK: 116 123 (Samaritans)  
+• Canada: 1-833-456-4566  
+• Australia: 13 11 14  
+• Or visit [https://findahelpline.com](https://findahelpline.com) for more options worldwide.
+
+**🫂 You're important. You matter. Talking to someone can help.**
+
+We care about you. Please don’t hesitate to reach out. 💙`;
+
+  try {
+    await sendDM(user, supportMessage);
+    await interaction.reply({
+      content: '📬 I’ve sent you a private message with resources. Please check your DMs.',
+      ephemeral: true
+    });
+  } catch (err) {
+    await interaction.reply({
+      content: '❌ I couldn’t send you a DM. Please make sure your DMs are open.',
+      ephemeral: true
+    });
+  }
+}
+
     else if (commandName === '8ball') {
     const question = options.getString('question');
     const answers = [
