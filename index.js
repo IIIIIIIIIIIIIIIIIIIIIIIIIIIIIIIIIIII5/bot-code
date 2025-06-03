@@ -433,32 +433,32 @@ else if (commandName === 'hug') {
   await interaction.deferReply();
 
   const GIPHY_API_KEY = 'd4YIU6uoHbUn8LmytyApPHc73kzmSdwY';
-  const url = `https://api.giphy.com/v1/gifs/search?q=hug&api_key=${GIPHY_API_KEY}&limit=25&rating=pg`;
+  const query = 'lion hugs';
+  const apiURL = `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&api_key=${GIPHY_API_KEY}&limit=25&rating=pg`;
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const res = await fetch(apiURL);
+    const data = await res.json();
 
-    if (!data.data || data.data.length === 0) {
-      return interaction.editReply('😔 Couldn’t find a hug GIF.');
+    if (!data || !data.data || data.data.length === 0) {
+      return interaction.editReply('😔 No hug GIFs found.');
     }
 
-    const randomGif = data.data[Math.floor(Math.random() * data.data.length)].images.original.url;
+    const gifUrl = data.data[Math.floor(Math.random() * data.data.length)].images.original.url;
 
     const embed = new EmbedBuilder()
       .setTitle('🤗 Hug!')
       .setDescription(`**${sender.username}** gives **${targetUser.username}** a warm hug!`)
-      .setImage(randomGif)
+      .setImage(gifUrl)
       .setColor('#FFC0CB');
 
     await interaction.editReply({ embeds: [embed] });
 
-  } catch (err) {
-    console.error('GIF Fetch Error:', err);
-    await interaction.editReply('❌ Failed to fetch a hug GIF.');
+  } catch (error) {
+    console.error('Hug GIF error:', error);
+    await interaction.editReply('❌ Something went wrong fetching a hug GIF.');
   }
 }
-
 
     else if (commandName === 'kick') {
       if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
