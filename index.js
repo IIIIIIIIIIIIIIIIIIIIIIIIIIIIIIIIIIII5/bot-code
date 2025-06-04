@@ -72,8 +72,8 @@ const commands = [
   .setDescription('Finds an image of a skibidi lion'),
 
   new SlashCommandBuilder()
-  .setName('suicideprevention')
-  .setDescription('Helps with suicidal thoughts.'),
+  .setName('support')
+  .setDescription('Helps with a lot of things you have.'),
 
   new SlashCommandBuilder()
     .setName('ban')
@@ -343,23 +343,23 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.reply({ content: '❌ Failed to change nickname. Do I have permission?', ephemeral: true });
   }
 }
-      else if (commandName === 'suicideprevention') {
+      else if (commandName === 'support') {
   const user = interaction.user;
 
   const supportMessage = `
-**💙 You're Not Alone**
+**You are not Alone**
 If you're feeling overwhelmed, hopeless, or thinking about suicide, please know that there is help available and people who care about you.
 
-**📞 Reach Out for Help:**
+**Reach Out for Help:**
 • USA: 988 or 1-800-273-TALK (8255)  
 • UK: 116 123 (Samaritans)  
 • Canada: 1-833-456-4566  
 • Australia: 13 11 14  
 • Or visit [Helpline](https://findahelpline.com) for more options worldwide.
 
-**🫂 You're important. You matter. Talking to someone can help.**
+**You are important. You matter. Talking to someone can help.**
 
-We care about you. Please don’t hesitate to reach out. 💙`;
+We care about you. Please don’t hesitate to reach out.`;
 
   try {
     await sendDM(user, supportMessage);
