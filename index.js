@@ -321,7 +321,7 @@ client.on('interactionCreate', async (interaction) => {
     }
     else if (commandName === 'say') {
       const text = options.getString('text');
-      console.log(`${interaction.user.tag}`);
+      console.log(`${interaction.user.tag} used say command`);
 
       await interaction.reply({ content: '📢 Sent your message.', ephemeral: true });
       await interaction.channel.send(text);
