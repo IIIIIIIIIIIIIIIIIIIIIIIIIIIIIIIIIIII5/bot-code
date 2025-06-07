@@ -293,7 +293,7 @@ client.on('messageCreate', async (message) => {
 
   recentMessages.set(userId, msgData);
 
-  if (msgData.count > 10) {
+  if (msgData.count > 8) {
     await punishSpammer(message.author, message.guild);
     recentMessages.set(userId, { count: 0, timestamp: now });
   }
