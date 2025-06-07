@@ -275,18 +275,28 @@ async function punishSpammer(user, guild) {
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.guild) return;
 
-  const now = Date.now();
   const userId = message.author.id;
-  const msgData = recentMessages.get(userId) || { lastMsg: '', lastTime: 0 };
+  const now = Date.now();
 
-  if (
-    msgData.lastMsg === message.content &&
-    now - msgData.lastTime < 5000
-  ) {
-    await punishSpammer(message.author, message.guild);
+  let msgData = recentMessages.get(userId);
+
+  if (!msgData) {
+    msgData = { count: 1, timestamp: now };
+  } else {
+    if (now - msgData.timestamp <= 1000) {
+      msgData.count++;
+    } else {
+      msgData.count = 1;
+      msgData.timestamp = now;
+    }
   }
 
-  recentMessages.set(userId, { lastMsg: message.content, lastTime: now });
+  recentMessages.set(userId, msgData);
+
+  if (msgData.count > 10) {
+    await punishSpammer(message.author, message.guild);
+    recentMessages.set(userId, { count: 0, timestamp: now });
+  }
 });
 
 client.on('interactionCreate', async (interaction) => {
