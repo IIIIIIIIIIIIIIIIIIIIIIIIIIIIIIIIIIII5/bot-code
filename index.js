@@ -362,8 +362,8 @@ else if (commandName === 'membercount') {
   }
 
   const embed = new EmbedBuilder()
-    .setTitle('📊 Member Count')
-    .setDescription(`Showing count for **${label}**`)
+    .setTitle('Member Count')
+    .setDescription(`Showing member count for **${label}**`)
     .addFields({ name: 'Total', value: `${count}`, inline: true })
     .setColor(color)
     .setTimestamp();
