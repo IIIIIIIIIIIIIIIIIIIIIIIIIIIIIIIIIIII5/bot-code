@@ -357,7 +357,7 @@ else if (commandName === 'membercount') {
     color = '#43b581';
   } else if (type === 'all') {
     count = members.size;
-    label = 'All Members (Humans + Bots)';
+    label = 'All Members';
     color = '#95a5a6';
   }
 
