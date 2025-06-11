@@ -94,16 +94,17 @@ const commands = [
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
-  new SlashCommandBuilder()
+new SlashCommandBuilder()
   .setName('membercount')
-  .setDescription('Get the number of bot or human members.')
+  .setDescription('Get the number of bot, human, or all members.')
   .addStringOption(option =>
     option.setName('type')
       .setDescription('Choose what to count')
       .setRequired(true)
       .addChoices(
         { name: 'Humans', value: 'human' },
-        { name: 'Bots', value: 'bot' }
+        { name: 'Bots', value: 'bot' },
+        { name: 'All', value: 'all' }
       )
   ),
 
@@ -340,18 +341,31 @@ client.on('interactionCreate', async (interaction) => {
       await interaction.channel.send(text);
 
     }
-      else if (commandName === 'membercount') {
+else if (commandName === 'membercount') {
   const type = options.getString('type');
   const members = await interaction.guild.members.fetch();
-  const count = type === 'bot'
-    ? members.filter(m => m.user.bot).size
-    : members.filter(m => !m.user.bot).size;
+
+  let count, label, color;
+
+  if (type === 'bot') {
+    count = members.filter(m => m.user.bot).size;
+    label = 'Bots';
+    color = '#7289da';
+  } else if (type === 'human') {
+    count = members.filter(m => !m.user.bot).size;
+    label = 'Humans';
+    color = '#43b581';
+  } else if (type === 'all') {
+    count = members.size;
+    label = 'All Members (Humans + Bots)';
+    color = '#95a5a6';
+  }
 
   const embed = new EmbedBuilder()
     .setTitle('📊 Member Count')
-    .setDescription(`Showing count for **${type === 'bot' ? 'Bots' : 'Humans'}**`)
+    .setDescription(`Showing count for **${label}**`)
     .addFields({ name: 'Total', value: `${count}`, inline: true })
-    .setColor(type === 'bot' ? '#7289da' : '#43b581')
+    .setColor(color)
     .setTimestamp();
 
   await interaction.reply({ embeds: [embed] });
