@@ -95,6 +95,19 @@ const commands = [
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
   new SlashCommandBuilder()
+  .setName('membercount')
+  .setDescription('Get the number of bot or human members.')
+  .addStringOption(option =>
+    option.setName('type')
+      .setDescription('Choose what to count')
+      .setRequired(true)
+      .addChoices(
+        { name: 'Humans', value: 'human' },
+        { name: 'Bots', value: 'bot' }
+      )
+  ),
+
+  new SlashCommandBuilder()
   .setName('8ball')
   .setDescription('Ask the magic 8ball a question.')
   .addStringOption((opt) =>
@@ -327,6 +340,22 @@ client.on('interactionCreate', async (interaction) => {
       await interaction.channel.send(text);
 
     }
+      else if (commandName === 'membercount') {
+  const type = options.getString('type');
+  const members = await interaction.guild.members.fetch();
+  const count = type === 'bot'
+    ? members.filter(m => m.user.bot).size
+    : members.filter(m => !m.user.bot).size;
+
+  const embed = new EmbedBuilder()
+    .setTitle('📊 Member Count')
+    .setDescription(`Showing count for **${type === 'bot' ? 'Bots' : 'Humans'}**`)
+    .addFields({ name: 'Total', value: `${count}`, inline: true })
+    .setColor(type === 'bot' ? '#7289da' : '#43b581')
+    .setTimestamp();
+
+  await interaction.reply({ embeds: [embed] });
+}
     else if (commandName === 'dmcapeid') {
       const user = options.getUser('user');
       const id = options.getNumber('id');
