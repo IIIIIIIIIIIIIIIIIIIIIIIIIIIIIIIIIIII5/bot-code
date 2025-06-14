@@ -791,25 +791,33 @@ else if (commandName === 'lion') {
       }
 
       interaction.guild.channels
-        .create({
-          name: `ticket-${interaction.user.username}`,
-          type: 0,
-          parent: config.categoryId,
-          permissionOverwrites: [
-            {
-              id: interaction.guild.roles.everyone,
-              deny: ['ViewChannel'],
-            },
-            {
-              id: interaction.user.id,
-              allow: ['ViewChannel', 'SendMessages', 'ReadMessageHistory'],
-            },
-            {
-              id: config.ticketRole,
-              allow: ['ViewChannel', 'SendMessages', 'ReadMessageHistory'],
-            },
-          ],
-        })
+  .create({
+    name: `ticket-${interaction.user.username}`,
+    type: ChannelType.GuildText,
+    parent: config.categoryId,
+    permissionOverwrites: [
+      {
+        id: interaction.guild.roles.everyone,
+        deny: [PermissionsBitField.Flags.ViewChannel],
+      },
+      {
+        id: interaction.user.id,
+        allow: [
+          PermissionsBitField.Flags.ViewChannel,
+          PermissionsBitField.Flags.SendMessages,
+          PermissionsBitField.Flags.ReadMessageHistory,
+        ],
+      },
+      {
+        id: config.ticketRole,
+        allow: [
+          PermissionsBitField.Flags.ViewChannel,
+          PermissionsBitField.Flags.SendMessages,
+          PermissionsBitField.Flags.ReadMessageHistory,
+        ],
+      },
+    ],
+  })
         .then(async (channel) => {
           ticketInfo.set(interaction.user.id, channel.id);
 
