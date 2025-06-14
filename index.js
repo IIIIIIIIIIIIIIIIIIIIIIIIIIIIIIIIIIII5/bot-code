@@ -10,6 +10,8 @@ const {
   ButtonBuilder,
   ButtonStyle,
   Embed,
+  ChannelType,
+  PermissionsBitField
 } = require('discord.js');
 require('dotenv').config();
 
